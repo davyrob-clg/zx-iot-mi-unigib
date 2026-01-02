@@ -19,14 +19,51 @@ ZX-Wespi: ESP32-based Wifi-enabled Fileserver for ZX81 with very simple DIY inte
 
 
 
+## Building this with ESP-IDF
+
+The current version that works is ESP-IDF Version 4.4 with Windows or Linux
+
+Download and install - then run 
+
+```bash
+idf.py set-target esp32
+idf.py menuconfig
+```
+
+Set up the serial flasher command as per instructions here 
+
+https://docs.espressif.com/projects/esp-idf/en/v4.4/esp32/get-started/index.html
+
+Makes sure the cache is set to 4mb not 2mb. 
+
+![alt text]({9C42015F-DD2E-4E6F-B58F-DB9424090087}.png)
+
+Set the partition table to be with partitions_zx_iot.csv
+
+![alt text](image-1.png)
+
+Use idf.py build - this should build everything and the locations of the binaries and values are the same as the prebuilt ones except the paths will be to the build directory
+
+- Run the tool, go to "Developer Mode", "ESP32", choose "SPI download" tab
+- Set up the following files and positions to flash:
+
+  + build/partition_table/partition-table.bin     @  0x8000 
+  + build/ota_data_initial.bin                    @  0xd000
+  + build/bootloader/bootloader.bin               @  0x1000
+  + build/zx_iot_video.bin		                    @ 0x10000
+
+- For the rest of parameters, use:
+
+  + SPI SPEED 40MHz
+  + SPI MODE DIO
+  + FLSH SIZE 32MBit  (=4MB)
+  + COM: (need to find out, look up in your OS' device manager in case of doubt)
+  + BAUD: 460800 (may pick a different baud rate)
+
+ 
 
 
-
-
-
-
-
-## Downloading the firmware to the ESP32 Module
+## Downloading the firmware to the ESP32 Module - pre built 
 
 Info for the flash files and initial image download for the ZX-Wespi project:
 
@@ -64,4 +101,4 @@ This short instruction is for using the ESP32 download tool (tested with V3.8.5)
 - Press start to flash. If the ESP32 does not connect automatically, try holding the BOOT knob and/or EN(reset) 
 
 
-Instruction v1.1
+Instruction v2.0
